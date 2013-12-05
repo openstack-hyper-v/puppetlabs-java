@@ -106,6 +106,11 @@ class java(
     $jre_file    = "${tempdir}\\java_install.exe"
     $bundle_url = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=${bundleId}"
 
+    $use_java_alternative_path = $java_alternative_path ? {
+      default => "INSTALLDIR=${java_alternative_path}",
+      undef   => ""
+    }
+
     exec { 'download_java':
       command => "powershell -NoProfile -ExecutionPolicy remotesigned -command \"(new-object net.webclient).DownloadFile('${bundle_url}', '${jre_file}')\"",
       path    => "${systemdrive}\\windows\\system32;${systemdrive}\\windows\\system32\\WindowsPowerShell\\v1.0",
@@ -113,7 +118,7 @@ class java(
     }
 
     exec { 'install_jre':
-      command => "${jre_file} /s",
+      command => "${jre_file} /s ${use_java_alternative_path}",
       path    => "${systemdrive}\\windows\\system32;${systemdrive}\\windows\\system32\\WindowsPowerShell\\v1.0",
       require => Exec[ 'download_java' ],
       unless  => "cmd.exe /c If NOT EXIST \"${systemdrive}\\Program Files\\Java\" Exit 1",
