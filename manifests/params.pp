@@ -144,13 +144,13 @@ class java::params {
           $java_root_dir = "${systemdrive}\\Program Files\\Java"
         }
         'x86': {
-          $jdk_package = 'undef'
-          $jre_package = '81819'
+          $jdk_package   = 'undef'
+          $jre_package   = '81819'
           $java_root_dir = "${systemdrive}\\Program Files (x86)\\Java"
         }
         default: {
-          $jdk_package = 'undef'
-          $jre_package = '81819'
+          $jdk_package   = 'undef'
+          $jre_package   = '81819'
           $java_root_dir = "${systemdrive}\\Program Files (x86)\\Java"
         }
       }
