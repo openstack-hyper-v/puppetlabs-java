@@ -116,7 +116,7 @@ class java(
         command => "${jre_file} /s",
         path    => "${systemdrive}\\windows\\system32;${systemdrive}\\windows\\system32\\WindowsPowerShell\\v1.0",
         require => Exec[ 'download_java' ],
-        unless  => "cmd.exe /c If NOT EXIST \"${systemdrive}\\Program Files\\Java\" Exit 1",
+        unless  => "cmd.exe /c If NOT EXIST \"${java::params::java_root_dir}\" Exit 1",
       }
 
       Exec['download_java'] -> Exec['install_jre']

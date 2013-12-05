@@ -135,18 +135,23 @@ class java::params {
         $hw_arch = 'x86'
       }
 
+      $systemdrive = inline_template("<%= ENV['SystemDrive'] -%>")
+
       case $hw_arch {
         'AMD64': {
-          $jdk_package = 'undef'
-          $jre_package = '81821'
+          $jdk_package   = 'undef'
+          $jre_package   = '81821'
+          $java_root_dir = "${systemdrive}\\Program Files\\Java"
         }
         'x86': {
           $jdk_package = 'undef'
           $jre_package = '81819'
+          $java_root_dir = "${systemdrive}\\Program Files (x86)\\Java"
         }
         default: {
           $jdk_package = 'undef'
           $jre_package = '81819'
+          $java_root_dir = "${systemdrive}\\Program Files (x86)\\Java"
         }
       }
       $java = {
