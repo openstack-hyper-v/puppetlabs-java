@@ -121,5 +121,43 @@ class java::params {
         'jre' => { 'package' => $jre_package, },
       }
     }
+    'windows': {
+      #
+      # The version of Ruby that ships with Puppet on Windows is a 32 version.
+      # The 32 bit process will always return a PROCESSOR_ARCHITECTURE of x86, even
+      # when running on a 64 bit system.  The following code checks the registry
+      # for the true PROCESSOR_ARCHITECTURE.
+      #
+      $regInfo = inline_template("<%= `reg.exe query \"HKLM\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Session Manager\\\\Environment\" /v PROCESSOR_ARCHITECTURE` -%>")
+      if 'AMD64' in $regInfo {
+        $hw_arch = 'AMD64'
+      } else {
+        $hw_arch = 'x86'
+      }
+
+      $systemdrive = inline_template("<%= ENV['SystemDrive'] -%>")
+
+      case $hw_arch {
+        'AMD64': {
+          $jdk_package = 'undef'
+          $jre_package = '81821'
+          $alternative_path = "${systemdrive}\\Program Files\\Java"
+        }
+        'x86': {
+          $jdk_package = 'undef'
+          $jre_package = '81819'
+          $alternative_path = "${systemdrive}\\Program Files (x86)\\Java"
+        }
+        default: {
+          $jdk_package = 'undef'
+          $jre_package = '81819'
+          $alternative_path = "${systemdrive}\\Program Files (x86)\\Java"
+        }
+      }
+      $java = {
+        'jkd' => { 'package' => $jdk_package, },
+        'jre' => { 'package' => $jre_package, },
+      }
+    }
   }
 }
