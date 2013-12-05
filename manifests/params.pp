@@ -123,10 +123,10 @@ class java::params {
     }
     'windows': {
       #
-      # The version of Ruby that ships with Puppet on Windows is a 32 version.
-      # The 32 bit process will always return a PROCESSOR_ARCHITECTURE of x86, even
-      # when running on a 64 bit system.  The following code checks the registry
-      # for the true PROCESSOR_ARCHITECTURE.
+      # Puppet for Windows includes a 32 version of Ruby.  A 32 bit Windows
+      # process will always return a PROCESSOR_ARCHITECTURE of x86, even
+      # when running on 64 bit hardware.  The following code checks the
+      # registry for the true PROCESSOR_ARCHITECTURE.
       #
       $regInfo = inline_template("<%= `reg.exe query \"HKLM\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Session Manager\\\\Environment\" /v PROCESSOR_ARCHITECTURE` -%>")
       if 'AMD64' in $regInfo {
