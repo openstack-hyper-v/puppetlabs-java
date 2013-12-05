@@ -135,6 +135,16 @@ class java::params {
         $hw_arch = 'x86'
       }
 
+      #
+      # We do not want Java to install the WEB plugins on installed on the 
+      # Server Hyper-V release of Windows Server.  Collect the Windows Edition
+      # from the registry so we can detect which flaver of Windows were are
+      # running on.
+      #
+      $editionInfo = inline_template("<%= `reg.exe query \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\" /v EditionID` -%>")
+      $rawData = split($edID, ' +')
+      $editionID = $rawData[4]
+
       $systemdrive = inline_template("<%= ENV['SystemDrive'] -%>")
 
       case $hw_arch {

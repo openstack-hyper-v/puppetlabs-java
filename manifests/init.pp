@@ -112,8 +112,18 @@ class java(
         unless  => "cmd.exe /c If NOT EXIST ${jre_file} Exit 1",
       }
 
+      #
+      # If we are running on the Server Hyper-V release, do not install
+      # the Java Web plugins.
+      #
+      if $java::params::editionID == 'ServerHyperV' {
+        $web_java = 'WEB_JAVA=0'
+      } else {
+        $web_java = ''
+      }
+
       exec { 'install_jre':
-        command => "${jre_file} /s",
+        command => "${jre_file} /s ${web_java}",
         path    => "${systemdrive}\\windows\\system32;${systemdrive}\\windows\\system32\\WindowsPowerShell\\v1.0",
         require => Exec[ 'download_java' ],
         unless  => "cmd.exe /c If NOT EXIST \"${java::params::java_root_dir}\" Exit 1",
