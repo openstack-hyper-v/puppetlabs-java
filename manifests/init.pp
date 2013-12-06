@@ -104,7 +104,7 @@ class java(
       $systemdrive = inline_template("<%= ENV['SystemDrive'] -%>")
 
       $jre_file    = "${tempdir}\\java_install.exe"
-      $bundle_url = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=${bundleId}"
+      $bundle_url  = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=${bundleId}"
 
       exec { 'download_java':
         command => "powershell -NoProfile -ExecutionPolicy remotesigned -command \"(new-object net.webclient).DownloadFile('${bundle_url}', '${jre_file}')\"",

@@ -136,10 +136,9 @@ class java::params {
       }
 
       #
-      # We do not want Java to install the WEB plugins on installed on the 
-      # Server Hyper-V release of Windows Server.  Collect the Windows Edition
-      # from the registry so init.pp can decide if the Web plugins should
-      # be installed.
+      # We do not want Java to install the WEB plugins on the Server Hyper-V
+      # release of Windows Server.  Collect the Windows Edition from the 
+      # registry so init.pp can decide if the Web plugins should be installed.
       #
       $editionInfo = inline_template("<%= `reg.exe query \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\" /v EditionID` -%>")
 
