@@ -146,17 +146,17 @@ class java::params {
 
       case $hw_arch {
         'AMD64': {
-          $jdk_package   = 'undef'
+          $jdk_package   = 'http://download.oracle.com/otn-pub/java/jdk/7u45-b18/jdk-7u45-windows-x64.exe'
           $jre_package   = '81821'
           $java_root_dir = "${systemdrive}\\Program Files\\Java"
         }
         'x86': {
-          $jdk_package   = 'undef'
+          $jdk_package   = 'http://download.oracle.com/otn-pub/java/jdk/7u45-b18/jdk-7u45-windows-i586.exe'
           $jre_package   = '81819'
           $java_root_dir = "${systemdrive}\\Program Files (x86)\\Java"
         }
         default: {
-          $jdk_package   = 'undef'
+          $jdk_package   = 'http://download.oracle.com/otn-pub/java/jdk/7u45-b18/jdk-7u45-windows-i586.exe'
           $jre_package   = '81819'
           $java_root_dir = "${systemdrive}\\Program Files (x86)\\Java"
         }

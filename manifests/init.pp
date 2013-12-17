@@ -94,17 +94,18 @@ class java(
       -> anchor { 'java::end': }
     }
     'windows': {
-      if $distribution == "jdk" {
-        fail("The JDK is currently unsupported for Windows via Puppet")
-      }
-
       $bundleId = $java::params::java[$distribution]['package']
 
       $tempdir     = inline_template("<%= ENV['TEMP'] -%>")
       $systemdrive = inline_template("<%= ENV['SystemDrive'] -%>")
 
       $jre_file    = "${tempdir}\\java_install.exe"
-      $bundle_url  = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=${bundleId}"
+
+      if $distribution == "jdk" {
+        $bundle_url  = $bundleId
+      } else {
+        $bundle_url  = "http://javadl.sun.com/webapps/download/AutoDL?BundleId=${bundleId}"
+      }
 
       exec { 'download_java':
         command => "powershell -NoProfile -ExecutionPolicy remotesigned -command \"(new-object net.webclient).DownloadFile('${bundle_url}', '${jre_file}')\"",
@@ -122,14 +123,14 @@ class java(
         $web_java = 'WEB_JAVA=1'
       }
 
-      exec { 'install_jre':
+      exec { 'install_${distribution}':
         command => "${jre_file} /s ${web_java}",
         path    => "${systemdrive}\\windows\\system32;${systemdrive}\\windows\\system32\\WindowsPowerShell\\v1.0",
         require => Exec[ 'download_java' ],
         unless  => "cmd.exe /c If NOT EXIST \"${java::params::java_root_dir}\" Exit 1",
       }
 
-      Exec['download_java'] -> Exec['install_jre']
+      Exec['download_java'] -> Exec['install_${distribution}']
     }
   }
 }
