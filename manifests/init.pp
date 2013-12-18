@@ -123,13 +123,20 @@ class java(
       # }
 
       exec { 'install_jre':
-        command => "${jre_file} /s ${web_java}",
+        command => "cmd /c \"${jre_file} /s ${web_java}\"",
         path    => "${systemdrive}\\windows\\system32;${systemdrive}\\windows\\system32\\WindowsPowerShell\\v1.0",
         require => Exec[ 'download_java' ],
         unless  => "cmd.exe /c If NOT EXIST \"${java::params::java_root_dir}\" Exit 1",
       }
-
-      Exec['download_java'] -> Exec['install_jre']
+      
+      exec { 'symlink_java':
+        command => "cmd /c mklink /d \\ProgramData\\Java \"${java::params::java_root_dir}\"",
+        path    => "${systemdrive}\\windows\\system32",
+        require => Exec[ 'install_jre' ],
+        unless  => 'cmd.exe /c If NOT EXIST \ProgramData\Java Exit 1',
+      }
+      
+      Exec['download_java'] -> Exec['install_jre'] -> Exec['symlink_java']
     }
   }
 }
