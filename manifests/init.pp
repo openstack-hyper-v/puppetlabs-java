@@ -116,11 +116,11 @@ class java(
       # If we are running on the Server Hyper-V release, do not install
       # the Java Web plugins.
       #
-      if 'ServerHyper' in $java::params::editionInfo {
+      # if 'ServerHyper' in $java::params::editionInfo {
         $web_java = 'WEB_JAVA=0'
-      } else {
-        $web_java = 'WEB_JAVA=1'
-      }
+      # } else {
+      #   $web_java = 'WEB_JAVA=1'
+      # }
 
       exec { 'install_jre':
         command => "${jre_file} /s ${web_java}",
